@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
-import firebase from "../../firebase";
+import { firebase } from "../../firebase";
 
 const LoginForm = ({ navigation }) => {
   const LoginFormSchema = Yup.object().shape({
@@ -27,7 +27,18 @@ const LoginForm = ({ navigation }) => {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       console.log("Firebase Login Successfully!", email, password);
     } catch (error) {
-      Alert.alert(error.message);
+      Alert.alert(
+        "Something Went Wrong!",
+        error.message + "\n\n What would you like to do next?",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("OK"),
+            style: "cancel",
+          },
+          { text: "Sign Up", onPress: () => navigation.push("SignUpScreen") },
+        ]
+      );
     }
   };
 
